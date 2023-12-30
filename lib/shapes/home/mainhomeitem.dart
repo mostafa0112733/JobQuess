@@ -4,7 +4,7 @@ import 'package:project/models/savedModel.dart';
 import 'package:project/shapes/home/rowsbutton.dart';
 import 'package:provider/provider.dart';
 
-class MHI extends StatelessWidget {
+class MHI extends StatefulWidget {
   final Job jobs;
   final Widget path;
 
@@ -12,23 +12,31 @@ class MHI extends StatelessWidget {
     Key? key,
     required this.jobs,
     required this.path,
-  });
+  }) : super(key: key);
+
+  @override
+  _MHIState createState() => _MHIState();
+}
+
+class _MHIState extends State<MHI> {
+  bool isBlue = false;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => path));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => widget.path));
       },
       style: ElevatedButton.styleFrom(
-        primary: Colors.white, 
+        primary: Colors.white,
       ),
       child: Column(
         children: [
           Row(
             children: [
               Image.network(
-                jobs.image,
+                widget.jobs.image,
                 height: 50,
                 width: 50,
               ),
@@ -40,15 +48,15 @@ class MHI extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    jobs.name,
+                    widget.jobs.name,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
-                    jobs.jobType,
+                    widget.jobs.jobType,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 12,
@@ -58,16 +66,26 @@ class MHI extends StatelessWidget {
                 ],
               ),
               Spacer(),
-              
-              ElevatedButton(onPressed: () {
-                // Use provider to access the CartModel and add the product to the cart
-                Provider.of<SavedModel>(context, listen: false)
-                    .addToCart(jobs);
-              }, child:   Image.asset(
-                 'assets/images/Icons/archive-minus.png',
-                color: Colors.black,
-               ))
-             
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    isBlue = !isBlue;
+                  });
+
+                  final savedModel =
+                      Provider.of<SavedModel>(context, listen: false);
+
+                  if (savedModel.savedItems.contains(widget.jobs)) {
+                    savedModel.removeFromCart(widget.jobs);
+                  } else {
+                    savedModel.addToCart(widget.jobs);
+                  }
+                },
+                icon: Icon(
+                  Icons.archive_outlined,
+                  color: isBlue ? Colors.blue : Colors.black,
+                ),
+              )
             ],
           ),
           SizedBox(
@@ -77,18 +95,22 @@ class MHI extends StatelessWidget {
             children: [
               RB(
                   btncolor: Color.fromARGB(255, 119, 186, 230),
-                  name: jobs.jobTimeType),
+                  name: widget.jobs.jobTimeType),
               Spacer(),
-              Text('${jobs.salary}K',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black)),
-              Text("/Month",
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black)),
+              Text(
+                '${widget.jobs.salary}K',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
+              ),
+              Text(
+                "/Month",
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
+              ),
             ],
           ),
           SizedBox(

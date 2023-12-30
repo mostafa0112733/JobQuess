@@ -12,9 +12,7 @@ class Saved extends StatelessWidget {
     List<Job> cartItems = Provider.of<SavedModel>(context).savedItems;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Saved Jobs'), // Update the title accordingly
-      ),
+
       body: ListView.builder(
         itemCount: cartItems.length,
         itemBuilder: (context, index) {
