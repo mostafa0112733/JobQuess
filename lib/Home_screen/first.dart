@@ -6,7 +6,7 @@ import 'package:project/models/jobesmodel.dart';
 import 'package:project/shapes/home/mainhomeitem.dart';
 import 'package:project/shapes/home/rowsbutton.dart';
 import 'package:http/http.dart' as http;
-import 'package:project/shapes/search.dart';
+import 'package:project/shapes/home/serch.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -20,6 +20,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final Job jobs;
+  List<Job> allJobs = []; 
+  List<Job> searchResults = []; // Store the current search results
+
+  void performSearch(String query) {
+    setState(() {
+      searchResults = allJobs
+          .where((job) =>
+              job.name.toLowerCase().contains(query.toLowerCase()) ||
+              job.aboutCompany.toLowerCase().contains(query.toLowerCase()) ||
+              job.salary.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
 
   Future<List<Job>> _api() async {
     final String apiUrl = "https://project2.amit-learning.com/api/jobs";
@@ -88,7 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 15,
             ),
-            Search(),
+             Searchh(
+                onSearch: performSearch,
+              ),
             SizedBox(
               height: 15,
             ),
@@ -253,37 +268,39 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 15,
             ),
             //home page items
-            FutureBuilder<List<Job>>(
-              future: _api(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  List<Widget> mhiWidgets = [];
-                  for (var job in snapshot.data!) {
-                    mhiWidgets.add(
-                      MHI(
-                        jobs: job,
-                        path: Details(
-                          token: widget.token,
-                          username: widget.userName,
+                 FutureBuilder<List<Job>>(
+                future: _api(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    allJobs = snapshot.data ?? [];
+                    List<Widget> mhiWidgets = [];
+                    for (var job in searchResults.isNotEmpty ? searchResults : allJobs) {
+                      mhiWidgets.add(
+                        MHI(
                           jobs: job,
+                          path: Details(
+                            token: widget.token,
+                            username: widget.userName,
+                            jobs: job,
+                          ),
                         ),
-                      ),
+                      );
+                    }
+
+                    return Column(
+                      children: mhiWidgets,
                     );
                   }
-
-                  return Column(
-                    children: mhiWidgets,
-                  );
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
