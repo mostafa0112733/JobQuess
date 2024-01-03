@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class Searchh extends StatefulWidget {
   final Function(String) onSearch;
+   final String token;
+   final String userName;
+  const Searchh({super.key ,required this.token, required this.userName,required this.onSearch});
 
-  const Searchh({Key? key, required this.onSearch}) : super(key: key);
 
   @override
   _SearchhState createState() => _SearchhState();

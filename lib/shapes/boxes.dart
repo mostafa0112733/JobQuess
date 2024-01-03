@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/shapes/boxwrap.dart';
 
 class Boxes extends StatefulWidget {
   const Boxes({super.key, required this.img, required this.name});

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project/models/savedModel.dart';
 import 'package:project/onboadrdin/SplachScreen.dart';
-import 'package:project/provider/userprovider.dart';
 import 'package:provider/provider.dart';
 
 

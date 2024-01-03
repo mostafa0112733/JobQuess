@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:project/proilesetting/Login_and_security.dart';
@@ -6,7 +5,6 @@ import 'package:project/proilesetting/Portfolio.dart';
 import 'package:project/proilesetting/Notification.dart';
 
 import 'package:project/proilesetting/editprofil.dart';
-import 'package:http/http.dart' as http;
 import 'package:project/proilesetting/language.dart';
 import 'package:project/proilesetting/privacypolicy.dart';
 import 'package:project/proilesetting/terms&conditions.dart';

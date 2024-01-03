@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/Home_screen/first.dart';
-import 'package:project/LOGIN/login.dart';
 import 'package:project/restpassword/restoasswordtwo.dart';
 import 'package:project/shapes/endbutton2.dart';
 import 'package:project/shapes/pagetitle.dart';

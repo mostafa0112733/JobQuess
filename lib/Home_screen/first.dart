@@ -6,7 +6,7 @@ import 'package:project/models/jobesmodel.dart';
 import 'package:project/shapes/home/mainhomeitem.dart';
 import 'package:project/shapes/home/rowsbutton.dart';
 import 'package:http/http.dart' as http;
-import 'package:project/shapes/home/serch.dart';
+import 'package:project/shapes/home/search1.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -101,9 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 15,
             ),
-             Searchh(
-                onSearch: performSearch,
-              ),
+            Searchone(token: widget.token, userName: widget.userName),
             SizedBox(
               height: 15,
             ),
