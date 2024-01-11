@@ -6,12 +6,12 @@ class SavedModel extends ChangeNotifier {
 
   List<Job> get savedItems => _savedItems;
 
-  void addToCart(Job item) {
+  void add(Job item) {
     _savedItems.add(item);
     notifyListeners();
   }
 
-  void removeFromCart(Job item) {
+  void remove(Job item) {
     if (_savedItems.contains(item)) {
       _savedItems.remove(item);
       notifyListeners();

@@ -7,10 +7,12 @@ class SearchNotFound extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
+
             'assets/images/search-zoom-out.png',
-            color: Colors.white,
+            color: Colors.blue,
           ),
           Text(
             "Search not found",
@@ -19,11 +21,13 @@ class SearchNotFound extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            "Try searching with different keywords so we can show you",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+          Center(
+            child: Text(
+              "Try searching with different keywords so we can show you",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],

@@ -37,11 +37,10 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<Job>> _api() async {
     final String apiUrl = "https://project2.amit-learning.com/api/jobs";
 
-    // Check if search parameters are not empty
     if (nameController.text.isNotEmpty ||
         locationController.text.isNotEmpty ||
         salaryController.text.isNotEmpty) {
-      // If any of the search parameters is not empty, update the API endpoint
+
       final String filterApiUrl =
           "https://project2.amit-learning.com/api/jobs/filter";
 
@@ -68,7 +67,6 @@ class _SearchPageState extends State<SearchPage> {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
     } else {
-      // If search parameters are empty, fetch data from the default endpoint
       var response = await http.get(
         Uri.parse(apiUrl),
         headers: {
@@ -92,9 +90,9 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       searchResults = allJobs
           .where((job) =>
-              job.name.toLowerCase().contains(query.toLowerCase()) ||
-              job.aboutCompany.toLowerCase().contains(query.toLowerCase()) ||
-              job.salary.toLowerCase().contains(query.toLowerCase()))
+              job.name.contains(query) ||
+              job.aboutCompany.contains(query) ||
+              job.salary.contains(query))
           .toList();
     });
   }
@@ -102,62 +100,152 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          Searchh(
-            onSearch: performSearch,
-            token: widget.token,
-            userName: widget.userName,
-          ),
-          ModelBottom(
-            onFilterPressed: (name, location, salary) {
-              setState(() {
-                nameController.text = name;
-                locationController.text = location;
-                salaryController.text = salary;
-              });
-            },
-          ),
-          FutureBuilder<List<Job>>(
-            future: _api(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                List<Job> allJobs = snapshot.data ?? [];
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: ListView(
+          children: [
+            Searchh(
+              onSearch: performSearch,
+              token: widget.token,
+              userName: widget.userName,
+            ),
+            Row(
+              children: [
+                ModelBottom(
+                  onFilterPressed: (name, location, salary) {
+                    setState(() {
+                      nameController.text = name;
+                      locationController.text = location;
+                      salaryController.text = salary;
+                    });
+                  },
+                ),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0)),
+                DropDown(
+                  Option1: 'Remote',
+                  Option2: 'On Site',
+                  Option3: 'Hyprid',
+                ),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0)),
+                DropDown(
+                  Option1: 'Any',
+                  Option2: 'Part Time',
+                  Option3: 'Full Time',
+                ),
+                Padding(padding: EdgeInsets.fromLTRB(10, 10, 0, 0)),
+                DropDown(
+                  Option1: 'Any',
+                  Option2: 'Part Time',
+                  Option3: 'Full Time',
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 15)),
+            FutureBuilder<List<Job>>(
+              future: _api(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<Job> allJobs = snapshot.data ?? [];
 
-                print("Number of jobs: ${allJobs.length}");
+                  if (allJobs.isEmpty) {
+                    print("Displaying SearchNotFound");
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 4.5,
+                        ),
+                        SearchNotFound(),
+                      ],
+                    );
+                  } else {
+                    List<Widget> mhiWidgets = [];
+                    for (var job
+                        in searchResults.isNotEmpty ? searchResults : allJobs) {
+                      mhiWidgets.add(
+                        MHI(
+                          jobs: job,
+                          path: Details(
+                            token: widget.token,
+                            username: widget.userName,
+                            jobs: job,
+                          ),
+                        ),
+                      );
+                    }
 
-                if (allJobs.isEmpty) {
-                  // Display SearchNotFound widget if no data is available
-                  print("Displaying SearchNotFound");
-                  return SearchNotFound();
+                    return Column(
+                      children: mhiWidgets,
+                    );
+                  }
                 }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-                List<Widget> mhiWidgets = [];
-                for (var job
-                    in searchResults.isNotEmpty ? searchResults : allJobs) {
-                  mhiWidgets.add(
-                    MHI(
-                      jobs: job,
-                      path: Details(
-                        token: widget.token,
-                        username: widget.userName,
-                        jobs: job,
-                      ),
-                    ),
-                  );
-                }
+class DropDown extends StatefulWidget {
+  final String Option1;
+  final String Option2;
+  final String Option3;
+  const DropDown(
+      {Key? key,
+      required this.Option1,
+      required this.Option2,
+      required this.Option3})
+      : super(key: key);
 
-                return Column(
-                  children: mhiWidgets,
-                );
-              }
-            },
-          ),
-        ],
+  @override
+  _DropDownState createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+  late String selectedValue; // Initial value
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.Option1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.blue,
+      ),
+      child: DropdownButton<String>(
+        value: selectedValue,
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            setState(() {
+              selectedValue = newValue;
+            });
+          }
+        },
+        items: <String>[widget.Option1, widget.Option2, widget.Option3]
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        }).toList(),
+        dropdownColor: Colors.blue, // Dropdown background color
+        icon: Icon(Icons.arrow_drop_down, color: Colors.white), // Dropdown icon
+        style: TextStyle(color: Colors.white), // Dropdown text style
       ),
     );
   }

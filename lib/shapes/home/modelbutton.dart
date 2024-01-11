@@ -6,7 +6,8 @@ import 'package:project/shapes/pagetitle.dart';
 class ModelBottom extends StatefulWidget {
   final Function(String, String, String) onFilterPressed;
 
-  const ModelBottom({Key? key, required this.onFilterPressed}) : super(key: key);
+  const ModelBottom({Key? key, required this.onFilterPressed})
+      : super(key: key);
 
   @override
   State<ModelBottom> createState() => _ModelBottomState();
@@ -34,9 +35,21 @@ class _ModelBottomState extends State<ModelBottom> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: const Text('Show Modal BottomSheet'),
-      onPressed: () {
+    return InkWell(
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: EdgeInsets.all(12),
+          child: Row(children: [
+            Image.asset(
+              'assets/images/setting-4.png',
+              width: 24,
+              height: 24,
+              color: Colors.black,
+            ),
+          ])),
+      onTap: () {
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
@@ -69,7 +82,9 @@ class _ModelBottomState extends State<ModelBottom> {
                       Controller: salaryController,
                       icon: null,
                     ),
-                    Text("Job Type", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                    Text("Job Type",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500)),
                     Row(
                       children: [
                         CountryContainer(

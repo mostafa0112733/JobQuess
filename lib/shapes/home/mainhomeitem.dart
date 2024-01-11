@@ -76,9 +76,9 @@ class _MHIState extends State<MHI> {
                       Provider.of<SavedModel>(context, listen: false);
 
                   if (savedModel.savedItems.contains(widget.jobs)) {
-                    savedModel.removeFromCart(widget.jobs);
+                    savedModel.remove(widget.jobs);
                   } else {
-                    savedModel.addToCart(widget.jobs);
+                    savedModel.add(widget.jobs);
                   }
                 },
                 icon: Icon(

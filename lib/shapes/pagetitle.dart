@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project/LOGIN/login.dart';
+import 'package:project/provider/userprovider.dart';
 
 class PageTitle extends StatelessWidget {
   final String name;
@@ -22,6 +24,13 @@ class PageTitle extends StatelessWidget {
               fontWeight: FontWeight.w500,
             )),
         Spacer(),
+        IconButton(
+            onPressed: () {
+              AuthProvider().clearToken();
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => LogIn()));
+            },
+            icon: Icon(Icons.logout))
       ],
     );
   }

@@ -10,7 +10,6 @@ class Searchone extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to the search page here
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -20,7 +19,7 @@ class Searchone extends StatelessWidget {
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 13,
+        height: MediaQuery.of(context).size.height / 15,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
@@ -28,8 +27,10 @@ class Searchone extends StatelessWidget {
           ),
         ),
         child: Row(
+          
           children: [
-            Icon(Icons.search),
+            Padding(padding: EdgeInsets.all(8)),
+            Icon(Icons.search,  size: 15,),
             Text(
               'Search',
               style: TextStyle(fontWeight: FontWeight.w700), 

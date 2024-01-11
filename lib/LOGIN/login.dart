@@ -104,7 +104,6 @@ class _LogInState extends State<_LogInWidget> {
       }
     } catch (error) {
       print("Error during login: $error");
-      // Handle the error as needed (e.g., show an error message to the user).
     }
   }
 
